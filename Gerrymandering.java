@@ -15,10 +15,13 @@ public class Gerrymandering {
       
       introduction();
       String state = getState();
+      String lowerState = state.toLowerCase();
       
-      String line = lineSearch(state, districts);
+      String line = lineSearch(lowerState, districts);
+      if(line.equals("")) {
+         System.out.println("\"" + state + "\" not found.");
+      }
       
-      System.out.println("DEBUG: " + line);
       
    }
    
@@ -28,9 +31,10 @@ public class Gerrymandering {
       System.out.println("data about congressional voting districts");
       System.out.println("and determine whether a particular state is");
       System.out.println("gerrymandered.");
-      
+      System.out.println();
       System.out.println("Enter state names without spaces. For instance,");
       System.out.println("enter New Mexico as NewMexico.");
+      System.out.println();
    }
    
    // Asks the user for a state they would like voter data for.
@@ -38,23 +42,21 @@ public class Gerrymandering {
       Scanner response = new Scanner(System.in);
       System.out.print("Which state do you want to look up? ");
       String state = response.next();
-      state = state.toLowerCase();
       return state;
    }
    
    // Find and returns the next line in the districts.txt document that contains 
    // the state the user has given. If there is no match to the state given, an
    // empty string is returned.
-   public static String lineSearch(String state, Scanner districts) throws FileNotFoundException {
+   public static String lineSearch(String lowerState, Scanner districts) throws FileNotFoundException {
       while(districts.hasNextLine()) {
          String line = districts.nextLine();
          String lowerLine = line.toLowerCase();
-         if(lowerLine.contains(state)) {
+         if(lowerLine.contains(lowerState)) {
             return line;
          }
       }
       return "";
    }
-   
-   
+     
 }
