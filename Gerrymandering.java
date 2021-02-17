@@ -35,14 +35,16 @@ public class Gerrymandering {
          
          
          int panelWidth = 500;
-         DrawingPanel panel = new DrawingPanel(500,panelWidth);
+         int panelHeight = 500;
+         DrawingPanel panel = new DrawingPanel(panelHeight, panelWidth);
          Graphics g = panel.getGraphics();
          g.setColor(Color.BLACK);
          g.drawLine(0, 20, panelWidth, 20);
+         g.drawLine(panelWidth / 2, 0, panelWidth / 2, panelHeight);
          // THIS NEEDS TO BE FIXED TO HAVE THE FIRST LETTER OF STATE CAPITALIZED
          g.drawString(state, 0, 15);
          g.drawString(totalVoters + " eligible voters", panelWidth - 140, 15);
-         
+
          
       }
    }
