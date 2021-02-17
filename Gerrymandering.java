@@ -10,17 +10,27 @@ import java.util.*;
 
 public class Gerrymandering {
    public static void main(String[] args) throws FileNotFoundException {
-      // DrawingPanel panel = new DrawingPanel(500,500);
       Scanner districts = new Scanner(new File("districts.txt"));
       
       introduction();
       String state = getState();
       String lowerState = state.toLowerCase();
       
-      String line = lineSearch(lowerState, districts);
-      if(line.equals("")) {
+      String districtsLine = lineSearch(lowerState, districts);
+      if(districtsLine.equals("")) {
          System.out.println("\"" + state + "\" not found.");
+      } else {
+         Scanner eligible = new Scanner(new File("eligibleVoters.txt"));
+         String votersLine = lineSearch(lowerState, eligible);
+
+         
+         
+         
+         DrawingPanel panel = new DrawingPanel(500,500);
+         
       }
+      
+      
       
       
    }
@@ -45,12 +55,12 @@ public class Gerrymandering {
       return state;
    }
    
-   // Find and returns the next line in the districts.txt document that contains 
+   // Find and returns the next line in the specific document that references 
    // the state the user has given. If there is no match to the state given, an
    // empty string is returned.
-   public static String lineSearch(String lowerState, Scanner districts) throws FileNotFoundException {
-      while(districts.hasNextLine()) {
-         String line = districts.nextLine();
+   public static String lineSearch(String lowerState, Scanner docuScanner) throws FileNotFoundException {
+      while(docuScanner.hasNextLine()) {
+         String line = docuScanner.nextLine();
          String lowerLine = line.toLowerCase();
          if(lowerLine.contains(lowerState)) {
             return line;
