@@ -12,9 +12,13 @@ public class Gerrymandering {
    public static void main(String[] args) throws FileNotFoundException {
       Scanner districts = new Scanner(new File("districts.txt"));
       
+      // Prints introduction.
       introduction();
+      
+      // Prompts the user for a state.
       String state = getState();
       String lowerState = state.toLowerCase();
+      
       
       String districtsLine = lineSearch(lowerState, districts);
       if(districtsLine.equals("")) {
@@ -22,7 +26,9 @@ public class Gerrymandering {
       } else {
          Scanner eligible = new Scanner(new File("eligibleVoters.txt"));
          String votersLine = lineSearch(lowerState, eligible);
-
+         
+         // Scans the line given from the eligibleVoters.txt file and returns the totalVoters.
+         int totalVoters = grabTotalVoters(votersLine);
          
          
          
@@ -68,5 +74,17 @@ public class Gerrymandering {
       }
       return "";
    }
+   
+   // Scans the line given from the eligibleVoters.txt file and returns the totalVoters.
+   public static int grabTotalVoters(String votersLine) {
+         Scanner voterCountScan = new Scanner(votersLine);
+         int totalVoters = 0;
+         while(voterCountScan.hasNext()) {
+            String stateThrowaway = voterCountScan.next();
+            totalVoters = voterCountScan.nextInt();
+         }
+         return totalVoters;
+   }
+   
      
 }
