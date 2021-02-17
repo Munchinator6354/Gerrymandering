@@ -5,6 +5,7 @@
 // congressional voting districts and determine whether a 
 // particular state is gerrymandered.
 
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 
@@ -19,7 +20,9 @@ public class Gerrymandering {
       String state = getState();
       String lowerState = state.toLowerCase();
       
-      
+      // Searches the districts.txt file and returns nothing if the user gave an incorrect input.
+      // If the input is valid, it returns the district data about that state, followed by the
+      // total voter data form that state.
       String districtsLine = lineSearch(lowerState, districts);
       if(districtsLine.equals("")) {
          System.out.println("\"" + state + "\" not found.");
@@ -31,14 +34,17 @@ public class Gerrymandering {
          int totalVoters = grabTotalVoters(votersLine);
          
          
+         int panelWidth = 500;
+         DrawingPanel panel = new DrawingPanel(500,panelWidth);
+         Graphics g = panel.getGraphics();
+         g.setColor(Color.BLACK);
+         g.drawLine(0, 20, panelWidth, 20);
+         // THIS NEEDS TO BE FIXED TO HAVE THE FIRST LETTER OF STATE CAPITALIZED
+         g.drawString(state, 0, 15);
+         g.drawString(totalVoters + " eligible voters", panelWidth - 140, 15);
          
-         DrawingPanel panel = new DrawingPanel(500,500);
          
       }
-      
-      
-      
-      
    }
    
    // Prints out the introduction to the program and gives instructions.
