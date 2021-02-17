@@ -10,6 +10,10 @@ import java.io.*;
 import java.util.*;
 
 public class Gerrymandering {
+
+   public static final int PANELHEIGHT = 500;
+   public static final int PANELWIDTH = 500;
+
    public static void main(String[] args) throws FileNotFoundException {
       Scanner districts = new Scanner(new File("districts.txt"));
       
@@ -23,7 +27,22 @@ public class Gerrymandering {
       // Searches the districts.txt file and returns nothing if the user gave an incorrect input.
       // If the input is valid, it returns the district data about that state, followed by the
       // total voter data form that state.
+      
+      // THIS IS WHERE THE DISTRICT LINE IS RETURNED
       String districtsLine = lineSearch(lowerState, districts);
+      System.out.println("DEBUG DISTRICTS LINE: " + districtsLine);
+      
+      
+      
+      Scanner lineScan = new Scanner(districtsLine);
+      state = lineScan.next();
+      System.out.println("DEBUG state: " + state);
+      
+//       while(lineScan.hasNext()) {
+//             
+//             
+//       }
+      
       if(districtsLine.equals("")) {
          System.out.println("\"" + state + "\" not found.");
       } else {
@@ -34,16 +53,15 @@ public class Gerrymandering {
          int totalVoters = grabTotalVoters(votersLine);
          
          
-         int panelWidth = 500;
-         int panelHeight = 500;
-         DrawingPanel panel = new DrawingPanel(panelHeight, panelWidth);
+         DrawingPanel panel = new DrawingPanel(PANELHEIGHT, PANELWIDTH);
          Graphics g = panel.getGraphics();
          g.setColor(Color.BLACK);
-         g.drawLine(0, 20, panelWidth, 20);
-         g.drawLine(panelWidth / 2, 0, panelWidth / 2, panelHeight);
-         // THIS NEEDS TO BE FIXED TO HAVE THE FIRST LETTER OF STATE CAPITALIZED
+         g.drawLine(0, 20, PANELWIDTH, 20);
+         g.drawLine(PANELWIDTH / 2, 0, PANELWIDTH / 2, PANELHEIGHT);
+         // THIS NEEDS TO BE FIXED TO HAVE THE FIRST LETTER OF STATE CAPITALIZED, MAYBE GRAB STATE AND SET TO state WHEN READING THROUGH LINE
          g.drawString(state, 0, 15);
-         g.drawString(totalVoters + " eligible voters", panelWidth - 140, 15);
+         g.drawString(totalVoters + " eligible voters", PANELWIDTH - 140, 15);
+         
 
          
       }
