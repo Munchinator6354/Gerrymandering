@@ -24,25 +24,73 @@ public class Gerrymandering {
       String state = getState();
       String lowerState = state.toLowerCase();
       
-      // Searches the districts.txt file and returns nothing if the user gave an incorrect input.
+      // Searches districts.txt file and returns nothing if the user gave an incorrect input.
       // If the input is valid, it returns the district data about that state, followed by the
       // total voter data form that state.
-      
-      // THIS IS WHERE THE DISTRICT LINE IS RETURNED
       String districtsLine = lineSearch(lowerState, districts);
-      System.out.println("DEBUG DISTRICTS LINE: " + districtsLine);
       
-      
-      
+      // Scans the line of data returned from districts.txt
       Scanner lineScan = new Scanner(districtsLine);
       state = lineScan.next();
-      System.out.println("DEBUG state: " + state);
+    
+      int district = 0;
+      int demCount = 0;
+      int repCount = 0;
+      int demTotal = 0;
+      int repTotal = 0;
+      int demWasted = 0;
+      int repWasted = 0;
+      int demTotalWasted = 0;
+      int repTotalWasted = 0;
+    
+      while(lineScan.hasNext()) {
+         System.out.println();
+         district = lineScan.nextInt();
+         System.out.println("DEBUG district: " + district);
+         
+         demCount = lineScan.nextInt();
+         demTotal += demCount;
+         System.out.println("DEBUG demCount: " + demCount);
+         System.out.println("DEBUG demTotal: " + demTotal);
+         
+         repCount = lineScan.nextInt();
+         repTotal += repCount;
+         System.out.println("DEBUG repCount: " + repCount);
+         System.out.println("DEBUG repTotal: " + repTotal);
+         
+         // If Democrats win the district
+         if(demCount > repCount) {
+            demWasted = demCount - ((demCount + repCount)/2 + 1);
+            System.out.println("DEBUG demWasted: " + demWasted);
+            
+            repWasted = repCount;
+            System.out.println("DEBUG repWasted: " + repWasted);
+            
+            demTotalWasted += demWasted;
+            System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
+            
+            repTotalWasted += repWasted;
+            System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
+            
+         // If Republicans win the district   
+         } else if(repCount > demCount) {
+            demWasted = demCount;
+            System.out.println("DEBUG demWasted: " + demWasted);
+            
+            repWasted = repCount - ((demCount + repCount)/2 + 1);
+            System.out.println("DEBUG repWasted: " + repWasted);
+            
+            demTotalWasted += demWasted;
+            System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
+            
+            repTotalWasted += repWasted;
+            System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
+         }
+      }
       
-//       while(lineScan.hasNext()) {
-//             
-//             
-//       }
       
+      // Tells the user if the state they searched for has available data, and 
+      // if it does, displays the information.
       if(districtsLine.equals("")) {
          System.out.println("\"" + state + "\" not found.");
       } else {
@@ -51,8 +99,12 @@ public class Gerrymandering {
          
          // Scans the line given from the eligibleVoters.txt file and returns the totalVoters.
          int totalVoters = grabTotalVoters(votersLine);
-         
-         
+         System.out.println();
+         System.out.println("Total Wasted Democratic votes: " + demTotalWasted);
+         System.out.println("Total Wasted Republican votes: " + repTotalWasted);
+         System.out.println("Gerrymandered benefiting the ");
+         System.out.println(totalVoters + " eligible voters");
+            
          DrawingPanel panel = new DrawingPanel(PANELHEIGHT, PANELWIDTH);
          Graphics g = panel.getGraphics();
          g.setColor(Color.BLACK);
@@ -112,5 +164,4 @@ public class Gerrymandering {
          return totalVoters;
    }
    
-     
 }
