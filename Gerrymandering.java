@@ -24,98 +24,102 @@ public class Gerrymandering {
       String state = getState();
       String lowerState = state.toLowerCase();
       
-      // Searches districts.txt file and returns nothing if the user gave an incorrect input.
-      // If the input is valid, it returns the district data about that state, followed by the
-      // total voter data form that state.
+      // Searches districts.txt file and returns a blank string if the user gave an invalid input.
+      // If the input is valid, it returns the district data about that state.
       String districtsLine = lineSearch(lowerState, districts);
-      
-      // Scans the line of data returned from districts.txt
-      Scanner lineScan = new Scanner(districtsLine);
-      state = lineScan.next();
-    
-      int district = 0;
-      int demCount = 0;
-      int repCount = 0;
-      int demTotal = 0;
-      int repTotal = 0;
-      int demWasted = 0;
-      int repWasted = 0;
-      int demTotalWasted = 0;
-      int repTotalWasted = 0;
-    
-      while(lineScan.hasNext()) {
-         System.out.println();
-         district = lineScan.nextInt();
-         System.out.println("DEBUG district: " + district);
-         
-         demCount = lineScan.nextInt();
-         demTotal += demCount;
-         System.out.println("DEBUG demCount: " + demCount);
-         System.out.println("DEBUG demTotal: " + demTotal);
-         
-         repCount = lineScan.nextInt();
-         repTotal += repCount;
-         System.out.println("DEBUG repCount: " + repCount);
-         System.out.println("DEBUG repTotal: " + repTotal);
-         
-         // If Democrats win the district
-         if(demCount > repCount) {
-            demWasted = demCount - ((demCount + repCount)/2 + 1);
-            System.out.println("DEBUG demWasted: " + demWasted);
-            
-            repWasted = repCount;
-            System.out.println("DEBUG repWasted: " + repWasted);
-            
-            demTotalWasted += demWasted;
-            System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
-            
-            repTotalWasted += repWasted;
-            System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
-            
-         // If Republicans win the district   
-         } else if(repCount > demCount) {
-            demWasted = demCount;
-            System.out.println("DEBUG demWasted: " + demWasted);
-            
-            repWasted = repCount - ((demCount + repCount)/2 + 1);
-            System.out.println("DEBUG repWasted: " + repWasted);
-            
-            demTotalWasted += demWasted;
-            System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
-            
-            repTotalWasted += repWasted;
-            System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
-         }
-      }
-      
-      
-      // Tells the user if the state they searched for has available data, and 
-      // if it does, displays the information.
       if(districtsLine.equals("")) {
          System.out.println("\"" + state + "\" not found.");
       } else {
+         // Scans the line given from the eligibleVoters.txt file and returns the totalVoters.
          Scanner eligible = new Scanner(new File("eligibleVoters.txt"));
          String votersLine = lineSearch(lowerState, eligible);
-         
-         // Scans the line given from the eligibleVoters.txt file and returns the totalVoters.
          int totalVoters = grabTotalVoters(votersLine);
-         System.out.println();
-         System.out.println("Total Wasted Democratic votes: " + demTotalWasted);
-         System.out.println("Total Wasted Republican votes: " + repTotalWasted);
-         System.out.println("Gerrymandered benefiting the ");
-         System.out.println(totalVoters + " eligible voters");
-            
+         
+         // Scans the line of data returned from districts.txt
+         Scanner lineScan = new Scanner(districtsLine);
+         state = lineScan.next();
+    
+         int district = 0;
+         int demCount = 0;
+         int repCount = 0;
+         int demTotal = 0;
+         int repTotal = 0;
+         int demWasted = 0;
+         int repWasted = 0;
+         int demTotalWasted = 0;
+         int repTotalWasted = 0;
          DrawingPanel panel = new DrawingPanel(PANELHEIGHT, PANELWIDTH);
          Graphics g = panel.getGraphics();
          g.setColor(Color.BLACK);
          g.drawLine(0, 20, PANELWIDTH, 20);
          g.drawLine(PANELWIDTH / 2, 0, PANELWIDTH / 2, PANELHEIGHT);
-         // THIS NEEDS TO BE FIXED TO HAVE THE FIRST LETTER OF STATE CAPITALIZED, MAYBE GRAB STATE AND SET TO state WHEN READING THROUGH LINE
          g.drawString(state, 0, 15);
          g.drawString(totalVoters + " eligible voters", PANELWIDTH - 140, 15);
+         int count = 25;
+         while(lineScan.hasNext()) {
+            System.out.println();
+            district = lineScan.nextInt();
+            System.out.println("DEBUG district: " + district);
          
+            demCount = lineScan.nextInt();
+            demTotal += demCount;
+            System.out.println("DEBUG demCount: " + demCount);
+            System.out.println("DEBUG demTotal: " + demTotal);
+            
+            repCount = lineScan.nextInt();
+            repTotal += repCount;
+            System.out.println("DEBUG repCount: " + repCount);
+            System.out.println("DEBUG repTotal: " + repTotal);
+            
+            
+            // START BACK HERE, START DRAWING THE RECTANGLES IN PER DISTRICT AS THEY ARE READ
+            g.setColor(Color.RED);
+            g.fillRect(0, count, PANELWIDTH, 20);
+            g.setColor(Color.BLUE);
+            g.fillRect(0, count, PANELWIDTH * demCount / (demCount + repCount), 20);
+            
+            count += 25;
 
+
+            // If Democrats win the district
+            if(demCount > repCount) {
+               demWasted = demCount - ((demCount + repCount)/2 + 1);
+               System.out.println("DEBUG demWasted: " + demWasted);
+            
+               repWasted = repCount;
+               System.out.println("DEBUG repWasted: " + repWasted);
+            
+               demTotalWasted += demWasted;
+               System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
+            
+               repTotalWasted += repWasted;
+               System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
+            
+            // If Republicans win the district   
+            } else if(repCount > demCount) {
+               demWasted = demCount;
+               System.out.println("DEBUG demWasted: " + demWasted);
+            
+               repWasted = repCount - ((demCount + repCount)/2 + 1);
+               System.out.println("DEBUG repWasted: " + repWasted);
+            
+               demTotalWasted += demWasted;
+               System.out.println("DEBUG demTotalWasted: " + demTotalWasted);
+            
+               repTotalWasted += repWasted;
+               System.out.println("DEBUG repTotalWasted: " + repTotalWasted);
+            }
+         }
          
+         // Displays the outro messages
+         System.out.println();
+         System.out.println("Total Wasted Democratic votes: " + demTotalWasted);
+         System.out.println("Total Wasted Republican votes: " + repTotalWasted);
+         
+         
+         
+         System.out.println("Gerrymandered benefiting the ");
+         System.out.println(totalVoters + " eligible voters");
       }
    }
    
